@@ -1,0 +1,8 @@
+
+*.pyc
+*.json
+.vscode/
+.vscode/settings.json
+.vscode/settings.json
+ws.code_workspace
+*.json
