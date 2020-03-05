@@ -2,10 +2,19 @@ import discord
 from discord.ext import commands
 import sys, traceback, logging
 import time, os, json
+import asyncio
 
 logging.basicConfig(format='[%(asctime)s] %(levelname)s: %(message)s', level=logging.INFO)
 bot = commands.Bot(command_prefix="-", activity=discord.Game("Booting PetFox!"))
 logging.info(f"Booting into PetFox...")
+
+@bot.event
+async def on_connect():
+    logging.info(f"Connected to Discord. Now loading...")
+
+@bot.event 
+async def on_disconnect():
+    logging.info(f"Discord connection has been lost or closed.")
 
 @bot.event
 async def on_ready():
@@ -25,5 +34,7 @@ try:
     token = open("bottoken.txt", "r+").read()
 except:
     logging.error(f"failed to find a token for the bot to login with, can not continue. Please insert a file into the PetFox directory called bottoken.txt with a valid bot token")
+    logging.info(f"bot will now close.")
+    exit()
 
 bot.run(token, bot=True, reconnect=True)
