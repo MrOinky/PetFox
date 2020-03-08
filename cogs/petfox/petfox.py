@@ -9,6 +9,13 @@ logging.basicConfig(format='[%(asctime)s] %(levelname)s: %(message)s', level=log
 def setup(bot):
     bot.add_cog(petfox(bot))
 
+try:
+    open("storage/petfox.json", "x")
+    json.dump(dict(),open("storage/petfox.json", "w"))
+    logging.info("Created petfox storage.")
+except:
+    logging.info("Found petfox storage.")
+
 class petfox(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -26,3 +33,46 @@ class petfox(commands.Cog):
         embed.add_field(name=":bug: Bugs", value="In the event of an issue, \nmake sure to report it so\nyou can get the best\nexperience!", inline=True)
 
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def start(self, ctx):
+        """Create your account!"""
+        guildid = str(ctx.guild.id)
+        userid = str(ctx.author.id)
+        with open("storage/petfox.json", "r+") as f:
+            Storage = json.load(f)
+        if guildid not in Storage:
+            Storage[guildid] = {}
+            logging.info("Added guildid {} to storage".format(guildid))
+        if userid in Storage[guildid].keys():
+            await ctx.send("You have already made an account!")
+            return
+        Storage[guildid][userid] = {"foxdata": 
+                                       {
+                                        "foxes": 1, 
+                                        "thirst": 20, 
+                                        "fullness": 80, 
+                                        "happiness":75.0
+                                       },
+                                    "supplies": 
+                                       {
+                                        "basicfood": 10, 
+                                        "water": 5
+                                       },
+                                    "badges": {},
+                                    "foxes": {}, 
+                                    "data": 
+                                       {
+                                        "totalfeeds": 0, 
+                                        "totaldrinks": 0, 
+                                        "timesplayed": 0, 
+                                        "battles": 0,
+                                        "itemsbought": 0
+                                       }
+                                   }
+        with open("storage/petfox.json", "w+") as f:
+            json.dump(Storage, f)
+        await ctx.send("You have now set up your foxpet account!")
+        await asyncio.sleep(1)
+        await ctx.send("You also need to run -newbank now to set up your currency, then you have completed your setup process.")
+        logging.info("finished petfox account setup for {user} in guild {guild}.".format(user=userid, guild=guildid))
