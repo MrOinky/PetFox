@@ -26,7 +26,7 @@ if not os.path.isdir("dicts/basevalues"):
 #create the settings file where it is required
 #manages both the core settings and PetFox settings (on a cog by cog basis)
 #system very similar to (if not the same as) JdavisBro's FoxBot settings system
-def locatesettings(filename, content):
+def setsettings(filename, content):
     try:
         open(f"settings/{filename}.json", "x")
         json.dump(content,open(f"settings/{filename}.json","w"))
@@ -34,7 +34,8 @@ def locatesettings(filename, content):
     except:
         logging.info(f"skipping writing to {filename}.json, already exists.")
 
-locatesettings("core", {"prefix": "-"})
+setsettings("core", {"prefix": "-"})
+setsettings("cogs", ["cogs.petfox.petfox", "cogs.data.data", "cogs.currency.currency"])
 
 with open("settings/core.json") as f:
     coresettings = json.load(f)
@@ -43,13 +44,26 @@ prefix = coresettings["prefix"]
 bot = commands.Bot(command_prefix=prefix, activity=discord.Game("Booting PetFox!"))
 logging.info(f"Booting into PetFox...")
 
+with open("settings/cogs.json") as f:
+    extensions = json.load(f)
+
+if __name__ == "__main__":
+    for extension in extensions:
+        try:
+            bot.load_extension(extension)
+        except:
+            logging.warn("Could not load {}".format(extension))
+            raise
+        else:
+            logging.info("Successfully loaded cog {}".format(extension))
+
 @bot.event
 async def on_connect():
     logging.info(f"Connected to Discord. Now loading...")
 
 @bot.event 
 async def on_disconnect():
-    logging.info(f"Discord connection has been lost or closed.")
+    logging.info(f"Discord connection has been closed.")
 
 @bot.event
 async def on_ready():
@@ -58,6 +72,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game("with foxes!"))
 
 @bot.command(name="shutdown", aliases = ["close"])
+@commands.is_owner()
 async def shutdown(ctx):
     await ctx.send("Closing PetFox v0.0.1 (now with files (and no petfox)) :wave:")
     logging.info(f"Shutting down PetFoxBot.")
@@ -66,11 +81,12 @@ async def shutdown(ctx):
     exit()
 
 @bot.command()
+@commands.is_owner()
+#this is entirely broken, DO NOT TOUCH
+#if you want to edit the prefix as of now, use settings/core.json
+#using this command will currently erase core.json and then prevent the bot from booting
 async def prefix(ctx, prefix: str):
-    with open("settings/core.json") as f:
-        file = json.load(f)
-    oprefix = file["prefix"]
-    json.dump("settings/core.json", {"prefix": prefix})
+    json.dump(open("settings/core.json", "w"), {"prefix": prefix})
     await ctx.send("Updated bot prefix, restart the bot for this to take effect.")
 
 @bot.event
