@@ -32,6 +32,11 @@ class currency(commands.Cog):
             settings = json.load(f)
             return settings[setting]
 
+    def getValue(self, guildid: str, userid: str, value):
+        with open("storage/currency.json", "r+") as f:
+            Storage = json.load(f)
+            return Storage[guildid][userid]["data"][value]
+
     @commands.command()
     async def newbank(self, ctx):
         """Create your account!"""
@@ -62,5 +67,31 @@ class currency(commands.Cog):
             json.dump(Storage, f)
         await ctx.send("You have now set up your currency account!")
         logging.info("fully finished account setup for {user} in guild {guild}.".format(user=userid, guild=guildid))
+
+    @commands.command()
+    async def bal(self, ctx):
+        """View your balance!"""
+        guildid = str(ctx.guild.id)
+        userid = str(ctx.author.id)
+        with open("storage/currency.json", "r+") as f:
+            Storage = json.load(f)
+        if guildid not in Storage:
+            await ctx.send("You do not have a currency account!")
+            return
+        if userid not in Storage[guildid].keys():
+            await ctx.send("You do not have a currency account!")
+            return
+        money = currency.getValue(self,guildid,userid,"currentmoney")
+        honey = currency.getValue(self,guildid,userid,"currenthoney")
+        embed = discord.Embed(title="Bank details for {}:".format(ctx.author.name), colour=discord.Colour(0x7ed321), timestamp=datetime.datetime.utcfromtimestamp(time.time()))
+
+        embed.set_footer(text="Pet Fox by Mr_Oinky#6467", icon_url="https://cdn.discordapp.com/avatars/586640508772679681/e64788f49c5f602ce29b94eb0e32d75d.png?size=256")
+
+        embed.add_field(name=":red_circle: Tokens", value="You currently have {} tokens.".format(money))
+        embed.add_field(name=":bee: Honey", value="You currently have {} honey drops.".format(honey))
+
+        await ctx.send(embed=embed)
+
+
 
         

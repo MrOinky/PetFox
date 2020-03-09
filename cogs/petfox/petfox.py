@@ -76,3 +76,27 @@ class petfox(commands.Cog):
         await asyncio.sleep(1)
         await ctx.send("You also need to run -newbank now to set up your currency, then you have completed your setup process.")
         logging.info("finished petfox account setup for {user} in guild {guild}.".format(user=userid, guild=guildid))
+
+    @commands.command()
+    async def shop(self, ctx):
+        embed = discord.Embed(title="Shop", colour=discord.Colour(0x4a90e2), timestamp=datetime.datetime.utcfromtimestamp(time.time()))
+
+        embed.set_footer(text="Pet Fox by Mr_Oinky#6467", icon_url="https://cdn.discordapp.com/avatars/586640508772679681/e64788f49c5f602ce29b94eb0e32d75d.png?size=256")
+
+        embed.add_field(name=":cup_with_straw: Water", value="5 Tokens each.", inline=True)
+        embed.add_field(name=":canned_food: Basic Food", value="5 Tokens per serving.", inline=True)
+        embed.add_field(name=":milk: Milk", value="15 Tokens each.", inline=True)
+        embed.add_field(name=":candy: Sweet Food", value="20 Tokens per serving.", inline=True)
+        embed.add_field(name=":leafy_green: Nutrient Food", value="25 Tokens per serving.", inline=True)
+        embed.add_field(name=":strawberry: Berry", value="35 Tokens each.", inline=True)
+        embed.add_field(name=":cut_of_meat: Meat Bites", value="40 Tokens per serving.", inline=True)
+        embed.add_field(name="<:waterglass:563403477343010816> Iced Water", value="25 Tokens each.", inline=True)
+        embed.add_field(name=":pancakes: Pancakes", value="100 Tokens each.", inline=True)
+        embed.add_field(name=":waffle: Waffles", value="100 Tokens each.", inline=True)
+        embed.add_field(name=":apple: Apple", value="60 Tokens each.", inline=True)
+        embed.add_field(name=":salad: Salad", value="55 Tokens per serving.", inline=True)
+        embed.add_field(name=":canned_food: Amateur Kibble", value="45 Tokens per serving.", inline=True)
+        embed.add_field(name=":cookie: Milk Choc Cookie", value="125 Tokens each.", inline=True)
+        embed.add_field(name="<:whitecookie:682713693489725443> White Choc Cookie", value="150 Tokens each.", inline=True)
+
+        await ctx.send(embed=embed)
