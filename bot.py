@@ -69,7 +69,7 @@ async def on_disconnect():
 async def on_ready():
     logging.info(f"Booted successfully as: {bot.user.name} with id {bot.user.id}")
     logging.info(f"Thank you for using PetFox.")
-    await bot.change_presence(activity=discord.Game("with foxes!"))
+    await bot.change_presence(activity=discord.Game("with foxes! Use -fox for help!"))
 
 @bot.command(name="shutdown", aliases = ["close"])
 @commands.is_owner()
@@ -89,11 +89,16 @@ async def prefix(ctx, prefix: str):
     json.dump(open("settings/core.json", "w"), {"prefix": prefix})
     await ctx.send("Updated bot prefix, restart the bot for this to take effect.")
 
+#currently matches JdavisBro's FoxBot handler, will eventually change this to prompt help on a command.
 @bot.event
 async def on_command_error(ctx, error):
-    if ctx.command.name == "raiseLastError":
-        raise error
+    if ctx.command != None:
+        if ctx.command.name == "raiseLastError":
+            raise error
     if isinstance(error, commands.CommandNotFound):
+        return
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f"The argument {error.param} is missing!")
         return
     await ctx.send(f"`{error} occured while running {ctx.command.name}`")
     bot.lastError = error

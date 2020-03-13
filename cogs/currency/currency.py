@@ -37,6 +37,11 @@ class currency(commands.Cog):
             Storage = json.load(f)
             return Storage[guildid][userid]["data"][value]
 
+    def setValue(self, guildid: str, userid: str, value, newvalue):
+        with open("storage/currency.json", "r+") as f:
+            Storage = json.load(f)
+            Storage[guildid][userid]["data"][value] = newvalue 
+
     @commands.command()
     async def newbank(self, ctx):
         """Create your account!"""

@@ -1,5 +1,6 @@
 
 *.pyc
-*.json
+settings/
+storage/
 .vscode/
 bottoken.txt
