@@ -174,8 +174,8 @@ class petfox(commands.Cog):
         
         while buymore:
             foxcount = petfox.getValue(self, guildid, userid, "foxdata", "foxes")
-            money = petfox.getCurValue(self, guildid, userid, "currentmoney")
-            honey = petfox.getCurValue(self, guildid, userid, "currenthoney")
+            money = petfox.getCurValue(self, guildid, userid, "money")
+            honey = petfox.getCurValue(self, guildid, userid, "honey")
             cost = 500 * foxcount
             hcost = 50 + max(foxcount - 9, 0) * 10000
             newcount = foxcount + 1
@@ -188,8 +188,8 @@ class petfox(commands.Cog):
                 petfox.setValue(self, guildid, userid, "foxdata", "foxes", newcount)
                 newmoney = money - cost
                 newhoney = honey - hcost
-                petfox.setCurValue(self, guildid, userid, "cuurentmoney", newmoney)
-                petfox.setCurValue(self, guildid, userid, "currenthoney", newhoney)
+                petfox.setCurValue(self, guildid, userid, "money", newmoney)
+                petfox.setCurValue(self, guildid, userid, "honey", newhoney)
         
 
             if int(amount) > 1:
