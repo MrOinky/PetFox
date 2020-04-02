@@ -10,4 +10,4 @@
  Before you can even run PetFox locally you need to create a file inside the downloaded repository called bottoken.txt and then put in a valid bot account token you can use.
  You also require discord.py to be installed, which you can find the instructions for here: https://discordpy.readthedocs.io/en/latest/intro.html
  
- Once you have got discord.py and entered a valid token, you should run the bot, which will then start logging any new files it creates, and then it should cocnnect. The bot should then work in any server it has joined into. For using the bot itself, the prefix is - (currently fixed) and the information command is -fox, which will list all the commands for you. 
+ Once you have got discord.py and entered a valid token, you should run the bot, which will then start logging any new files it creates, and then it should connect. The bot should then work in any server it has joined into. For using the bot itself, the prefix is - (currently fixed) and the information command is -fox, which will list all the commands for you. 
