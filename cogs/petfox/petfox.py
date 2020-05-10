@@ -47,11 +47,18 @@ class petfox(commands.Cog):
         with open("storage/petfox.json", "r+") as f:
             Storage = json.load(f)
             Storage[guildid][userid][data][value] = newvalue
+        with open("storage/petfox.json", "w+") as f:    
+            json.dump(Storage, f, indent=4)
 
-    def setValue(self, guildid: str, userid: str, value, newvalue):
+    def setCurValue(self, guildid: str, userid: str, value, newvalue):
         with open("storage/currency.json", "r+") as f:
             Storage = json.load(f)
-            Storage[guildid][userid]["data"][value] = newvalue  
+            Storage[guildid][userid]["data"][value] = newvalue
+
+    def getFoodValue(self, data: str):
+        with open("dicts/basevalues/foodvalues.json", "r+") as f:
+            Storage = json.load(f)
+            return Storage[data]
     
     @commands.command()
     async def fox(self, ctx):
@@ -104,7 +111,7 @@ class petfox(commands.Cog):
                                        }
                                    }
         with open("storage/petfox.json", "w+") as f:
-            json.dump(Storage, f)
+            json.dump(Storage, f, indent = 4)
         await ctx.send("You have now set up your foxpet account!")
         await asyncio.sleep(1)
         await ctx.send("You also need to run -newbank now to set up your currency, then you have completed your setup process.")
@@ -206,3 +213,78 @@ class petfox(commands.Cog):
                 cost = 500 * foxcount
                 hcost = hcost = 50 + max(foxcount - 9, 0) * 10000
                 await ctx.send("your next fox is now priced at {cost} tokens and {honey} honey.".format(cost = cost, honey = hcost))
+    #this is very questionable
+    @commands.command()
+    async def play(self, ctx):
+        guildid = str(ctx.guild.id)
+        userid = str(ctx.author.id)
+
+        mood = random.choice(["happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "veryhappy", "sad", "sad", "sad", "sad", "sad", "sad", "sad", "sad"])
+        happy = petfox.getValue(self, guildid, userid, "foxdata", "happiness")
+
+        if mood == "happy":
+            await ctx.send("Your foxes had a nice time playing with you.")
+            newhappy = happy + 0.4
+            petfox.setValue(self, guildid, userid, "foxdata", "happiness", newhappy)
+        elif mood == "veryhappy":
+            await ctx.send("You and your foxes had loads of fun playing together!")
+            newhappy = happy + 1.1
+            petfox.setValue(self, guildid, userid, "foxdata", "happiness", newhappy)
+        elif mood == "sad":
+            await ctx.send("Your foxes didn't enjoy playing that much.")
+    #remember that food codes are HUNGER, THIRST, HAPPINESS
+    #only currently allows single feeds.
+    @commands.command()
+    async def feed(self, ctx, food: str):
+        guildid = str(ctx.guild.id)
+        userid = str(ctx.author.id)
+
+        try:
+            fooditem = petfox.getFoodValue(self, food)
+        except KeyError:
+            await ctx.send(f"Whoops! looks like {food} doesnt exist!")
+            return
+
+        try:
+            amt = petfox.getValue(self, guildid, userid, "supplies", food) 
+        except KeyError:
+            await ctx.send(f"You do not have any {food}")
+            return
+
+        amt = amt - 1
+
+        petfox.setValue(self, guildid, userid, "supplies", food, amt)
+
+        hu = fooditem[0]
+        logging.info(str(hu))
+        t = fooditem[1]
+        logging.info(str(t))
+        ha = fooditem[2]
+        logging.info(str(ha))
+
+        hu = min(int(hu) + petfox.getValue(self, guildid, userid, "foxdata", "fullness"), 100)
+        logging.info(str(hu))
+        t = max(petfox.getValue(self, guildid, userid, "foxdata", "thirst") - int(t), 0)
+        logging.info(str(t))
+        ha = min(petfox.getValue(self, guildid, userid, "foxdata", "happiness") + int(ha), 255)
+        logging.info(str(ha))
+
+        petfox.setValue(self, guildid, userid, "foxdata", "fullness", hu)
+        petfox.setValue(self, guildid, userid, "foxdata", "thirst", t)
+        petfox.setValue(self, guildid, userid, "foxdata", "happiness", ha)
+
+        lemon = food[0]   
+
+        logging.info(f"{lemon}")
+        if lemon == "a":
+            await ctx.send(f"You fed your foxes an {food}.")
+        elif lemon == "e":
+            await ctx.send(f"You fed your foxes an {food}.")
+        elif lemon == "i":
+            await ctx.send(f"You fed your foxes an {food}.")
+        elif lemon == "o":
+            await ctx.send(f"You fed your foxes an {food}.")
+        elif lemon == "u":
+            await ctx.send(f"You fed your foxes an {food}.")        
+        else:
+            await ctx.send(f"You fed your foxes a {food}.")

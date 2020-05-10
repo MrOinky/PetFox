@@ -74,7 +74,7 @@ async def on_ready():
 @bot.command(name="shutdown", aliases = ["close"])
 @commands.is_owner()
 async def shutdown(ctx):
-    await ctx.send("Closing PetFox v0.0.1 (now with files (and no petfox)) :wave:")
+    await ctx.send("Closing PetFox v0.0.1 (base release) :wave:")
     logging.info(f"Shutting down PetFoxBot.")
     await bot.close()
     logging.info(f"Done.")
@@ -100,7 +100,7 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f"The argument {error.param} is missing!")
         return
-    await ctx.send(f"`{error} occured while running {ctx.command.name}`")
+    await ctx.send(f"The following error occured while running {ctx.command.name}: `{error}`")
     bot.lastError = error
 
 try:
