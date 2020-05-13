@@ -22,6 +22,8 @@ except:
 #all values are stored as a list of three as so:
 #["HUNGERVALUE","THIRSTVALUE","HAPPINESS"]
 #remember that hunger and happiness add on, and thirst takes off by default, only use negatives in the case you want to go the opposite way.
+#this is out of date and scheduled to get deleted soon as the bot already comes with these values.
+#the values here might not get read properly by the bot so be warned.
 try:
     open("dicts/basevalues/foodvalues.json", "x")
     json.dump({"basicfood": ["2", "0", "0"], "sweetfood": ["3", "0", "0.1"], "nutrientfood": ["5", "0", "0"], "berry": ["8", "1", "0.2"], "meatbites": ["12", "0", "0.1"], "pancake": ["9", "0", "0.4"], "waffle": ["11", "0", "0.3"], "apple": ["10", "2", "0.2"], "salad": ["14", "0", "0"], "amateurkibble": ["7", "0", "0.05"], "mchoccookie": ["13", "0", "0.5"], "wchockcookie": ["14", "0", "0.6"], "water": ["0", "6", "0"], "milk": ["0", "9", "0.05"], "icedwater": ["0", "7", "0.1"]}, open("dicts/basevalues/foodvalues.json", "w"), indent=4)
@@ -54,6 +56,8 @@ class petfox(commands.Cog):
         with open("storage/currency.json", "r+") as f:
             Storage = json.load(f)
             Storage[guildid][userid]["data"][value] = newvalue
+        with open("storage/currency.json", "w+") as f:
+            json.dump(Storage, f, indent=4)
 
     def getFoodValue(self, data: str):
         with open("dicts/basevalues/foodvalues.json", "r+") as f:
@@ -288,3 +292,42 @@ class petfox(commands.Cog):
             await ctx.send(f"You fed your foxes an {food}.")        
         else:
             await ctx.send(f"You fed your foxes a {food}.")
+    @commands.command()
+    async def buy(self, ctx, food: str):
+
+        guildid = str(ctx.guild.id)
+        userid = str(ctx.author.id)
+
+        try:
+            fooditem = petfox.getFoodValue(self, food)
+        except KeyError:
+            await ctx.send(f"{food} is not an item of food!")
+            return
+
+        try:
+            money = petfox.getCurValue(self, guildid, userid, "money")
+        except KeyError:
+            await ctx.send("Whoops! I cant find the money variable for your account, make sure youve done -start and -newbank before!")
+            return
+        
+        try:
+            cost = fooditem[3]
+        except KeyError:
+            await ctx.send("Uh Oh! Looks like this food has a malformed json entry, please inform the bot/fork author of this if you have not modified foodvalues.json in any way!")
+            return
+
+        money = int(money)
+
+        if money - cost < 0:
+            await ctx.send(f"You need {cost} tokens to afford this but only have {money}!")
+            return
+        else:
+            money = money - cost
+            petfox.setCurValue(self, guildid, userid, "money", money)
+            try:
+                amt = petfox.getValue(self, guildid, userid, "supplies", food)
+            except KeyError:
+                amt = 0
+            amt = amt + 1
+            petfox.setValue(self, guildid, userid, "supplies", food, amt)
+            await ctx.send(f"You just bought a {food}, bringing your total to {amt}!")
