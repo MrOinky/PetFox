@@ -74,7 +74,7 @@ async def on_ready():
 @bot.command(name="shutdown", aliases = ["close"])
 @commands.is_owner()
 async def shutdown(ctx):
-    await ctx.send("Closing PetFox v0.0.1 (base release) :wave:")
+    await ctx.send("Closing PetFox v0.1 (beta) :wave:")
     logging.info(f"Shutting down PetFoxBot.")
     await bot.close()
     logging.info(f"Done.")
