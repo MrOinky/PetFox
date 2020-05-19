@@ -1,96 +1,107 @@
 {
-    "format": {
-        "foodname": ["hunger value (out of 100)", "thirst value (out of 100)", "happiness value (out of 255)", "cost*", "emoji*","description*", "pluraltype*", "drink (boolean)*"],
-        "*": "anything unimplented."
-    },
     "basicfood": [
         2,
         0,
         0,
-        5
+        5,
+        ":canned_food:"
     ],
     "sweetfood": [
         3,
         0,
         0.1,
-        20
+        20,
+        ":candy:"
     ],
     "nutrientfood": [
         5,
         0,
         0,
-        25
+        25,
+        ":leafy_green:"
     ],
     "berry": [
         8,
         1,
         0.2,
-        35
+        35,
+        ":strawberry:"
     ],
     "meatbites": [
         12,
         0,
         0.1,
-        40
+        40,
+        ":cut_of_meat:"
     ],
     "pancake": [
         9,
         0,
         0.4,
-        100
+        100,
+        ":pancakes:"
     ],
     "waffle": [
         11,
         0,
         0.3,
-        100
+        100,
+        ":waffle:"
     ],
     "apple": [
         10,
         2,
         0.2,
-        60
+        60,
+        ":apple:"
     ],
     "salad": [
         14,
         0,
         0,
-        55
+        55,
+        ":salad:"
     ],
     "amateurkibble": [
         7,
         0,
         0.05,
-        45
+        45,
+        ":canned_food:"
     ],
     "mchoccookie": [
         13,
         0,
         0.5,
-        125
+        125,
+        ":cookie:"
     ],
-    "wchockcookie": [
+    "wchoccookie": [
         14,
         0,
         0.6,
-        150
+        150,
+        "<:whitecookie:682713693489725443>"
     ],
     "water": [
         0,
         6,
         0,
-        5
+        5,
+        ":cup_with_straw:"
     ],
     "milk": [
         0,
         9,
         0.05,
-        15
+        15,
+        ":milk:"
     ],
     "icedwater": [
         0,
         7,
         0.1,
-        25
+        25,
+        "<:waterglass:682713750201040906>"
     ]
 }

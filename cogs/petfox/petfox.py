@@ -146,6 +146,28 @@ class petfox(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    async def newshoptest(self, ctx):
+        """
+        Displays the shop items in a neat order.
+
+        Currently testing this new system rather than a giant embed chunk.
+        This is the main reason lots of new item values exist.
+        """
+
+        embed = discord.Embed(title="Shop", colour=discord.Colour(0x4a90e2), timestamp=datetime.datetime.utcfromtimestamp(time.time()))
+
+        embed.set_footer(text="Pet Fox by Mr_Oinky#6467", icon_url="https://cdn.discordapp.com/avatars/586640508772679681/e64788f49c5f602ce29b94eb0e32d75d.png?size=256")
+
+        with open("dicts/basevalues/foodvalues.json", "r+") as f:
+            foodvalues = json.load(f)
+
+        for i in foodvalues.keys():
+            food = petfox.getFoodValue(self, i)
+            embed.add_field(name=f"{food[4]} {i}", value=f"costs {food[3]} tokens.")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def stats(self, ctx):
         guildid = str(ctx.guild.id)
         userid = str(ctx.author.id)
