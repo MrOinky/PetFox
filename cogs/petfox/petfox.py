@@ -100,8 +100,8 @@ class petfox(commands.Cog):
                                        },
                                     "supplies": 
                                        {
-                                        "basicfood": 10, 
-                                        "water": 5
+                                        "Basic Food": 10, 
+                                        "Water": 5
                                        },
                                     "badges": {},
                                     "foxes": {}, 
@@ -122,7 +122,9 @@ class petfox(commands.Cog):
         logging.info("finished petfox account setup for {user} in guild {guild}.".format(user=userid, guild=guildid))
 
     @commands.command()
-    async def shop(self, ctx):
+    async def oldshop(self, ctx):
+
+        await ctx.send("this shop is no longer used, please refer to -shop for the new shop. This is being kept only for emergency purposes and is not guaranteed to be accurate.")
         embed = discord.Embed(title="Shop", colour=discord.Colour(0x4a90e2), timestamp=datetime.datetime.utcfromtimestamp(time.time()))
 
         embed.set_footer(text="Pet Fox by Mr_Oinky#6467", icon_url="https://cdn.discordapp.com/avatars/586640508772679681/e64788f49c5f602ce29b94eb0e32d75d.png?size=256")
@@ -146,7 +148,7 @@ class petfox(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def newshoptest(self, ctx):
+    async def shop(self, ctx):
         """
         Displays the shop items in a neat order.
 
@@ -163,7 +165,7 @@ class petfox(commands.Cog):
 
         for i in foodvalues.keys():
             food = petfox.getFoodValue(self, i)
-            embed.add_field(name=f"{food[4]} {i}", value=f"costs {food[3]} tokens.")
+            embed.add_field(name=f"{food[4]} {i}", value=f":red_circle:Costs {food[3]} tokens.\n:meat_on_bone:+{food[0]}% Hunger.\n:droplet:-{food[1]}% Thirst.")
 
         await ctx.send(embed=embed)
 
@@ -188,9 +190,14 @@ class petfox(commands.Cog):
         with open("storage/petfox.json", "r+") as f:
             Storage = json.load(f)
 
+        with open("dicts/basevalues/foodvalues.json", "r+") as f:
+            foodvalues = json.load(f)
+
         for item in Storage[guildid][userid]["supplies"].keys():
-            logging.info("adding field for {}".format(item))
-            embed.add_field(name=item, value="You have {amount} {item}s".format(amount=petfox.getValue(self, guildid, userid, "supplies", item), item=item))
+            logging.info(f"adding field for {item}")
+            food = petfox.getFoodValue(self, item)
+            amount = petfox.getValue(self, guildid, userid, "supplies", item)
+            embed.add_field(name=f"{food[4]}{item}", value=f"You have {amount} servings.\n:meat_on_bone:+{food[0]}% Hunger.\n:droplet:-{food[1]} Thirst.", inline=True)
         
         await ctx.send(embed=embed)
     @commands.command()

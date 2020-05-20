@@ -1,103 +1,103 @@
 {
-    "basicfood": [
+    "Basic Food": [
         2,
         0,
         0,
         5,
         ":canned_food:"
     ],
-    "sweetfood": [
+    "Sweet Food": [
         3,
         0,
         0.1,
         20,
         ":candy:"
     ],
-    "nutrientfood": [
+    "Nutrient Food": [
         5,
         0,
         0,
         25,
         ":leafy_green:"
     ],
-    "berry": [
+    "Strawberry": [
         8,
         1,
         0.2,
         35,
         ":strawberry:"
     ],
-    "meatbites": [
+    "Meat Bites": [
         12,
         0,
         0.1,
         40,
         ":cut_of_meat:"
     ],
-    "pancake": [
+    "Pancake": [
         9,
         0,
         0.4,
         100,
         ":pancakes:"
     ],
-    "waffle": [
+    "Waffle": [
         11,
         0,
         0.3,
         100,
         ":waffle:"
     ],
-    "apple": [
+    "Apple": [
         10,
         2,
         0.2,
         60,
         ":apple:"
     ],
-    "salad": [
+    "Salad": [
         14,
         0,
         0,
         55,
         ":salad:"
     ],
-    "amateurkibble": [
+    "Amateurkibble": [
         7,
         0,
         0.05,
         45,
         ":canned_food:"
     ],
-    "mchoccookie": [
+    "Milk Chocolate Cookie": [
         13,
         0,
         0.5,
         125,
         ":cookie:"
     ],
-    "wchoccookie": [
+    "White Chocolate Cookie": [
         14,
         0,
         0.6,
         150,
         "<:whitecookie:682713693489725443>"
     ],
-    "water": [
+    "Water": [
         0,
         6,
         0,
         5,
         ":cup_with_straw:"
     ],
-    "milk": [
+    "Milk": [
         0,
         9,
         0.05,
         15,
         ":milk:"
     ],
-    "icedwater": [
+    "Iced Water": [
         0,
         7,
         0.1,
