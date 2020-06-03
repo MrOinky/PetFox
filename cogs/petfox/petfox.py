@@ -18,19 +18,6 @@ try:
 except:
     logging.info("Found petfox storage.")
 
-#regenerator for all edible item values via feed
-#all values are stored as a list of three as so:
-#["HUNGERVALUE","THIRSTVALUE","HAPPINESS"]
-#remember that hunger and happiness add on, and thirst takes off by default, only use negatives in the case you want to go the opposite way.
-#this is out of date and scheduled to get deleted soon as the bot already comes with these values.
-#the values here might not get read properly by the bot so be warned.
-try:
-    open("dicts/basevalues/foodvalues.json", "x")
-    json.dump({"basicfood": ["2", "0", "0"], "sweetfood": ["3", "0", "0.1"], "nutrientfood": ["5", "0", "0"], "berry": ["8", "1", "0.2"], "meatbites": ["12", "0", "0.1"], "pancake": ["9", "0", "0.4"], "waffle": ["11", "0", "0.3"], "apple": ["10", "2", "0.2"], "salad": ["14", "0", "0"], "amateurkibble": ["7", "0", "0.05"], "mchoccookie": ["13", "0", "0.5"], "wchockcookie": ["14", "0", "0.6"], "water": ["0", "6", "0"], "milk": ["0", "9", "0.05"], "icedwater": ["0", "7", "0.1"]}, open("dicts/basevalues/foodvalues.json", "w"), indent=4)
-    logging.info("Created foodvalues.json.")
-except:
-    logging.info("Found foodvalues.json.")
-
 class petfox(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -98,7 +85,7 @@ class petfox(commands.Cog):
                                         "fullness": 80, 
                                         "happiness":75.0
                                        },
-                                    "supplies": 
+                                    "items": 
                                        {
                                         "Basic Food": 10, 
                                         "Water": 5
@@ -120,32 +107,6 @@ class petfox(commands.Cog):
         await asyncio.sleep(1)
         await ctx.send("You also need to run -newbank now to set up your currency, then you have completed your setup process.")
         logging.info("finished petfox account setup for {user} in guild {guild}.".format(user=userid, guild=guildid))
-
-    @commands.command()
-    async def oldshop(self, ctx):
-
-        await ctx.send("this shop is no longer used, please refer to -shop for the new shop. This is being kept only for emergency purposes and is not guaranteed to be accurate.")
-        embed = discord.Embed(title="Shop", colour=discord.Colour(0x4a90e2), timestamp=datetime.datetime.utcfromtimestamp(time.time()))
-
-        embed.set_footer(text="Pet Fox by Mr_Oinky#6467", icon_url="https://cdn.discordapp.com/avatars/586640508772679681/e64788f49c5f602ce29b94eb0e32d75d.png?size=256")
-
-        embed.add_field(name=":cup_with_straw: Water", value="5 Tokens each.", inline=True)
-        embed.add_field(name=":canned_food: Basic Food", value="5 Tokens per serving.", inline=True)
-        embed.add_field(name=":milk: Milk", value="15 Tokens each.", inline=True)
-        embed.add_field(name=":candy: Sweet Food", value="20 Tokens per serving.", inline=True)
-        embed.add_field(name=":leafy_green: Nutrient Food", value="25 Tokens per serving.", inline=True)
-        embed.add_field(name=":strawberry: Berry", value="35 Tokens each.", inline=True)
-        embed.add_field(name=":cut_of_meat: Meat Bites", value="40 Tokens per serving.", inline=True)
-        embed.add_field(name="<:waterglass:682713750201040906> Iced Water", value="25 Tokens each.", inline=True)
-        embed.add_field(name=":pancakes: Pancakes", value="100 Tokens each.", inline=True)
-        embed.add_field(name=":waffle: Waffles", value="100 Tokens each.", inline=True)
-        embed.add_field(name=":apple: Apple", value="60 Tokens each.", inline=True)
-        embed.add_field(name=":salad: Salad", value="55 Tokens per serving.", inline=True)
-        embed.add_field(name=":canned_food: Amateur Kibble", value="45 Tokens per serving.", inline=True)
-        embed.add_field(name=":cookie: Milk Choc Cookie", value="125 Tokens each.", inline=True)
-        embed.add_field(name="<:whitecookie:682713693489725443> White Choc Cookie", value="150 Tokens each.", inline=True)
-
-        await ctx.send(embed=embed)
 
     @commands.command()
     async def shop(self, ctx):
@@ -173,7 +134,7 @@ class petfox(commands.Cog):
     async def stats(self, ctx):
         guildid = str(ctx.guild.id)
         userid = str(ctx.author.id)
-        embed = discord.Embed(title="Fox Status", colour=discord.Colour(0xf5a623), description=":poultry_leg:Fullness\nYour foxes are {fullness}% full.\n:cup_with_straw:Thirst\nYour foxes are {thirst}% thirsty.\n:fox:Foxes\nYou have {foxcount} foxes.\nYour next fox is priced at {nextprice} tokens.".format(fullness = petfox.getValue(self,guildid,userid,"foxdata","fullness"), thirst = petfox.getValue(self,guildid,userid,"foxdata","thirst"), foxcount = petfox.getValue(self,guildid,userid,"foxdata","foxes"), nextprice = petfox.getValue(self,guildid,userid,"foxdata","foxes") * 500), timestamp=datetime.datetime.utcfromtimestamp(time.time()))
+        embed = discord.Embed(title="Fox Status", colour=discord.Colour(0xf5a623), description=":meat_on_bone:Fullness\nYour foxes are {fullness}% full.\n:droplet:Thirst\nYour foxes are {thirst}% thirsty.\n:fox:Foxes\nYou have {foxcount} foxes.\nYour next fox is priced at {nextprice} tokens.".format(fullness = petfox.getValue(self,guildid,userid,"foxdata","fullness"), thirst = petfox.getValue(self,guildid,userid,"foxdata","thirst"), foxcount = petfox.getValue(self,guildid,userid,"foxdata","foxes"), nextprice = petfox.getValue(self,guildid,userid,"foxdata","foxes") * 500), timestamp=datetime.datetime.utcfromtimestamp(time.time()))
 
         embed.set_footer(text="Pet Fox by Mr_Oinky#6467", icon_url="https://cdn.discordapp.com/avatars/586640508772679681/e64788f49c5f602ce29b94eb0e32d75d.png?size=256")
 
@@ -193,11 +154,11 @@ class petfox(commands.Cog):
         with open("dicts/basevalues/foodvalues.json", "r+") as f:
             foodvalues = json.load(f)
 
-        for item in Storage[guildid][userid]["supplies"].keys():
+        for item in Storage[guildid][userid]["items"].keys():
             logging.info(f"adding field for {item}")
             food = petfox.getFoodValue(self, item)
-            amount = petfox.getValue(self, guildid, userid, "supplies", item)
-            embed.add_field(name=f"{food[4]}{item}", value=f"You have {amount} servings.\n:meat_on_bone:+{food[0]}% Hunger.\n:droplet:-{food[1]} Thirst.", inline=True)
+            amount = petfox.getValue(self, guildid, userid, "items", item)
+            embed.add_field(name=f"{food[4]}{item}", value=f"You have {amount} servings.\n:meat_on_bone:+{food[0]}% Hunger.\n:droplet:-{food[1]}% Thirst.", inline=True)
         
         await ctx.send(embed=embed)
     @commands.command()
@@ -279,14 +240,14 @@ class petfox(commands.Cog):
             return
 
         try:
-            amt = petfox.getValue(self, guildid, userid, "supplies", food) 
+            amt = petfox.getValue(self, guildid, userid, "items", food) 
         except KeyError:
             await ctx.send(f"You do not have any {food}")
             return
 
         amt = amt - 1
 
-        petfox.setValue(self, guildid, userid, "supplies", food, amt)
+        petfox.setValue(self, guildid, userid, "items", food, amt)
 
         hu = fooditem[0]
         logging.info(str(hu))
@@ -308,7 +269,6 @@ class petfox(commands.Cog):
 
         lemon = food[0]   
 
-        logging.info(f"{lemon}")
         if lemon == "a":
             await ctx.send(f"You fed your foxes an {food}.")
         elif lemon == "e":
@@ -354,9 +314,9 @@ class petfox(commands.Cog):
             money = money - cost
             petfox.setCurValue(self, guildid, userid, "money", money)
             try:
-                amt = petfox.getValue(self, guildid, userid, "supplies", food)
+                amt = petfox.getValue(self, guildid, userid, "items", food)
             except KeyError:
                 amt = 0
             amt = amt + 1
-            petfox.setValue(self, guildid, userid, "supplies", food, amt)
+            petfox.setValue(self, guildid, userid, "items", food, amt)
             await ctx.send(f"You just bought a {food}, bringing your total to {amt}!")
