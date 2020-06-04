@@ -4,7 +4,8 @@
         0,
         0,
         5,
-        ":canned_food:"
+        ":canned_food:",
+        "Food"
     ],
     "Sweet Food": [
         3,
@@ -18,90 +19,103 @@
         0,
         0,
         25,
-        ":leafy_green:"
+        ":leafy_green:",
+        "Food"
     ],
     "Strawberry": [
         8,
         1,
         0.2,
         35,
-        ":strawberry:"
+        ":strawberry:",
+        "Food"
     ],
     "Meat Bites": [
         12,
         0,
         0.1,
         40,
-        ":cut_of_meat:"
+        ":cut_of_meat:",
+        "Food"
     ],
     "Pancake": [
         9,
         0,
         0.4,
         100,
-        ":pancakes:"
+        ":pancakes:",
+        "Food"
     ],
     "Waffle": [
         11,
         0,
         0.3,
         100,
-        ":waffle:"
+        ":waffle:",
+        "Food"
     ],
     "Apple": [
         10,
         2,
         0.2,
         60,
-        ":apple:"
+        ":apple:",
+        "Food"
     ],
     "Salad": [
         14,
         0,
         0,
         55,
-        ":salad:"
+        ":salad:",
+        "Food"
     ],
     "Amateurkibble": [
         7,
         0,
         0.05,
         45,
-        ":canned_food:"
+        ":canned_food:",
+        "Food"
     ],
     "Milk Chocolate Cookie": [
         13,
         0,
         0.5,
         125,
-        ":cookie:"
+        ":cookie:",
+        "Food"
     ],
     "White Chocolate Cookie": [
         14,
         0,
         0.6,
         150,
-        "<:whitecookie:682713693489725443>"
+        "<:whitecookie:682713693489725443>",
+        "Food"
     ],
     "Water": [
         0,
         6,
         0,
         5,
-        ":cup_with_straw:"
+        ":cup_with_straw:",
+        "Food"
     ],
     "Milk": [
         0,
         9,
         0.05,
         15,
-        ":milk:"
+        ":milk:",
+        "Food"
     ],
     "Iced Water": [
         0,
         7,
         0.1,
         25,
-        "<:waterglass:682713750201040906>"
+        "<:waterglass:682713750201040906>",
+        "Food"
     ]
 }
