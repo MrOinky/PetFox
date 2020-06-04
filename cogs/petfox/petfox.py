@@ -109,7 +109,7 @@ class petfox(commands.Cog):
         logging.info("finished petfox account setup for {user} in guild {guild}.".format(user=userid, guild=guildid))
 
     @commands.command()
-    async def shop(self, ctx):
+    async def shop(self, ctx, category = "all"):
         """
         Displays the shop items in a neat order.
 
@@ -124,10 +124,34 @@ class petfox(commands.Cog):
         with open("dicts/basevalues/itemvalues.json", "r+") as f:
             itemvalues = json.load(f)
 
+        foodtitle = False
+        caretitle = False
+        toystitle = False
+
         for i in itemvalues.keys():
             item = petfox.getItemValue(self, i)
-            embed.add_field(name=f"{item[4]} {i}", value=f":red_circle:Costs {item[3]} tokens.\n:meat_on_bone:+{item[0]}% Hunger.\n:droplet:-{item[1]}% Thirst.")
-
+            if category == "all" or category == "Food":
+                if item[5] == "Food":
+                    if foodtitle == False:
+                        embed.add_field(name=":meat_on_bone: Food", value="Use these to keep your foxes full and hydrated!", inline=False)
+                        foodtitle = True
+                    embed.add_field(name=f"{item[4]} {i[0].upper() + i[1:]}", value=f":red_circle:Costs {item[3]} tokens.\n:meat_on_bone:+{item[0]}% Hunger.\n:droplet:-{item[1]}% Thirst.")
+        for i in itemvalues.keys():
+            item = petfox.getItemValue(self, i)
+            if category == "all" or category == "Care":
+                if item[5] == "Care":
+                    if caretitle == False:
+                        embed.add_field(name=":green_heart: Care", value="Use these to keep your foxes clean and healthy!", inline=False)
+                        caretitle = True
+                    embed.add_field(name=f"{item[4]} {i[0].upper() + i[1:]}", value=f":red_circle:Costs {item[3]} tokens.")
+        for i in itemvalues.keys():
+            item = petfox.getItemValue(self, i)
+            if category == "all" or category == "Toys":
+                if item[5] == "Toys":
+                    if toystitle == False:
+                        embed.add_field(name=":yarn: Toys", value="Use these to keep your foxes happy!", inline=False)
+                        toystitle = True
+                    embed.add_field(name=f"{item[4]} {i[0].upper() + i[1:]}", value=f":red_circle:Costs {item[3]} tokens.")
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -140,7 +164,7 @@ class petfox(commands.Cog):
 
         await ctx.send(embed=embed)
     @commands.command()
-    async def inventory(self, ctx):
+    async def inventory(self, ctx, category = "all"):
         """See your cool items!"""
         guildid = str(ctx.guild.id)
         userid = str(ctx.author.id)
@@ -154,16 +178,37 @@ class petfox(commands.Cog):
         with open("dicts/basevalues/itemvalues.json", "r+") as f:
             itemvalues = json.load(f)
 
+        foodtitle = False
+        caretitle = False
+        toystitle = False
+
         for i in Storage[guildid][userid]["items"].keys():
-            logging.info(f"adding field for {i}")
             item = petfox.getItemValue(self, i)
             amount = petfox.getValue(self, guildid, userid, "items", i)
-            if item[5] == "Food":
-                embed.add_field(name=f"{item[4]}{i}", value=f"You have {amount} servings.\n:meat_on_bone:+{item[0]}% Hunger.\n:droplet:-{item[1]}% Thirst.", inline=True)
-            elif item[5] == "Care":
-                embed.add_field(name=f"{item[4]}{i}", value=f"You have {amount} Uses.", inline=True)
-            elif item[5] == "Toys":
-                embed.add_field(name=f"{item[4]}{i}", value=f"You have {amount} Left.", inline=True)
+            if category == "all" or category == "Food":
+                if item[5] == "Food":
+                    if foodtitle == False:
+                        embed.add_field(name=":meat_on_bone: Food", value="Use these to keep your foxes full and hydrated!", inline=False)
+                        foodtitle = True
+                    embed.add_field(name=f"{item[4]} {i[0].upper() + i[1:]}", value=f"You have {amount} servings.\n:meat_on_bone:+{item[0]}% Hunger.\n:droplet:-{item[1]}% Thirst.", inline=True)
+        for i in Storage[guildid][userid]["items"].keys():
+            item = petfox.getItemValue(self, i)
+            amount = petfox.getValue(self, guildid, userid, "items", i)
+            if category == "all" or category == "Care":
+                if item[5] == "Care":
+                    if caretitle == False:
+                        embed.add_field(name=":green_heart: Care", value="Use these to keep your foxes clean and healthy!", inline=False)
+                        caretitle = True
+                    embed.add_field(name=f"{item[4]} {i[0].upper() + i[1:]}", value=f"You have {amount} Uses.", inline=True)
+        for i in Storage[guildid][userid]["items"].keys():
+            item = petfox.getItemValue(self, i)
+            amount = petfox.getValue(self, guildid, userid, "items", i)
+            if category == "all" or category == "Toys":
+                if item[5] == "Toys":
+                    if toystitle == False:
+                        embed.add_field(name=":yarn: Toys", value="Use these to keep your foxes happy!", inline=False)
+                        toystitle = True
+                    embed.add_field(name=f"{item[4]} {i[0].upper() + i[1:]}", value=f"You have {amount} Left.", inline=True)
 
         await ctx.send(embed=embed)
     @commands.command()
@@ -238,20 +283,22 @@ class petfox(commands.Cog):
         guildid = str(ctx.guild.id)
         userid = str(ctx.author.id)
 
+        food = food.lower()
+
         try:
             fooditem = petfox.getItemValue(self, food)
         except KeyError:
-            await ctx.send(f"Whoops! looks like {food} doesnt exist!")
+            await ctx.send(f"Whoops! looks like {food[0].upper() + food[1:]} doesnt exist!")
             return
 
         if fooditem[5] != "Food":
-            await ctx.send(f"{food} is not a food!")
+            await ctx.send(f"{food[0].upper() + food[1:]} is not a food!")
             return "notfood"
 
         try:
             amt = petfox.getValue(self, guildid, userid, "items", food) 
         except KeyError:
-            await ctx.send(f"You do not have any {food}")
+            await ctx.send(f"You do not have any {food[0].upper() + food[1:]}")
             return
 
         amt = amt - 1
@@ -276,31 +323,33 @@ class petfox(commands.Cog):
         petfox.setValue(self, guildid, userid, "foxdata", "thirst", t)
         petfox.setValue(self, guildid, userid, "foxdata", "happiness", ha)
 
-        lemon = food[0]   
+        lemon = food[0].upper()  
 
         logging.info(f"{lemon}")
         if lemon == "A":
-            await ctx.send(f"You fed your foxes an {food}.")
+            await ctx.send(f"You fed your foxes an {food[0].upper() + food[1:]}.")
         elif lemon == "E":
-            await ctx.send(f"You fed your foxes an {food}.")
+            await ctx.send(f"You fed your foxes an {food[0].upper() + food[1:]}.")
         elif lemon == "I":
-            await ctx.send(f"You fed your foxes an {food}.")
+            await ctx.send(f"You fed your foxes an {food[0].upper() + food[1:]}.")
         elif lemon == "O":
-            await ctx.send(f"You fed your foxes an {food}.")
+            await ctx.send(f"You fed your foxes an {food[0].upper() + food[1:]}.")
         elif lemon == "U":
-            await ctx.send(f"You fed your foxes an {food}.")        
+            await ctx.send(f"You fed your foxes an {food[0].upper() + food[1:]}.")        
         else:
-            await ctx.send(f"You fed your foxes a {food}.")
+            await ctx.send(f"You fed your foxes a {food[0].upper() + food[1:]}.")
     @commands.command()
     async def buy(self, ctx, i: str):
 
         guildid = str(ctx.guild.id)
         userid = str(ctx.author.id)
 
+        i = i.lower()
+
         try:
             item = petfox.getItemValue(self, i)
         except KeyError:
-            await ctx.send(f"{i} is not an item!")
+            await ctx.send(f"{i[0].upper() + i[1:]} is not an item!")
             return
 
         try:
@@ -318,7 +367,7 @@ class petfox(commands.Cog):
         money = int(money)
 
         if money - cost < 0:
-            await ctx.send(f"You need {cost} tokens to afford {i} but only have {money}!")
+            await ctx.send(f"You need {cost} tokens to afford {i[0].upper() + i[1:]} but only have {money}!")
             return
         else:
             money = money - cost
@@ -330,17 +379,17 @@ class petfox(commands.Cog):
             amt = amt + 1
             petfox.setValue(self, guildid, userid, "items", i, amt)
 
-            lemon = i[0]   
+            lemon = i[0].upper()   
 
             if lemon == "A":
-                await ctx.send(f"You just bought an {i}, bringing your total to {amt}!")
+                await ctx.send(f"You just bought an {i[0].upper() + i[1:]}, bringing your total to {amt}!")
             elif lemon == "E":
-                await ctx.send(f"You just bought an {i}, bringing your total to {amt}!")
+                await ctx.send(f"You just bought an {i[0].upper() + i[1:]}, bringing your total to {amt}!")
             elif lemon == "I":
-                await ctx.send(f"You just bought an {i}, bringing your total to {amt}!")
+                await ctx.send(f"You just bought an {i[0].upper() + i[1:]}, bringing your total to {amt}!")
             elif lemon == "O":
-                await ctx.send(f"You just bought an {i}, bringing your total to {amt}!")
+                await ctx.send(f"You just bought an {i[0].upper() + i[1:]}, bringing your total to {amt}!")
             elif lemon == "U":
-                await ctx.send(f"You just bought an {i}, bringing your total to {amt}!")
+                await ctx.send(f"You just bought an {i[0].upper() + i[1:]}, bringing your total to {amt}!")
             else:
-                await ctx.send(f"You just bought a {i}, bringing your total to {amt}!")
+                await ctx.send(f"You just bought a {i[0].upper() + i[1:]}, bringing your total to {amt}!")
