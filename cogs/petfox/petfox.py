@@ -83,12 +83,13 @@ class petfox(commands.Cog):
                                         "foxes": 1, 
                                         "thirst": 20, 
                                         "fullness": 80, 
-                                        "happiness":75.0
+                                        "happiness": 75.0,
+                                        "health": 100
                                        },
                                     "items": 
                                        {
-                                        "Basic Food": 10, 
-                                        "Water": 5
+                                        "basic food": 10, 
+                                        "water": 5
                                        },
                                     "badges": {},
                                     "foxes": {}, 
@@ -265,6 +266,7 @@ class petfox(commands.Cog):
 
         mood = random.choice(["happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "happy", "veryhappy", "sad", "sad", "sad", "sad", "sad", "sad", "sad", "sad"])
         happy = petfox.getValue(self, guildid, userid, "foxdata", "happiness")
+        total = petfox.getValue(self, guildid, userid, "data", "timesplayed")
 
         if mood == "happy":
             await ctx.send("Your foxes had a nice time playing with you.")
@@ -276,6 +278,10 @@ class petfox(commands.Cog):
             petfox.setValue(self, guildid, userid, "foxdata", "happiness", newhappy)
         elif mood == "sad":
             await ctx.send("Your foxes didn't enjoy playing that much.")
+        
+        newtotal = total + 1
+        petfox.setValue(self, guildid, userid, "data", "timesplayed", newtotal)
+
     #remember that food codes are HUNGER, THIRST, HAPPINESS
     #only currently allows single feeds.
     @commands.command()
@@ -344,6 +350,8 @@ class petfox(commands.Cog):
         guildid = str(ctx.guild.id)
         userid = str(ctx.author.id)
 
+        total = petfox.getValue(self, guildid, userid, "data", "itemsbought")
+
         i = i.lower()
 
         try:
@@ -378,6 +386,9 @@ class petfox(commands.Cog):
                 amt = 0
             amt = amt + 1
             petfox.setValue(self, guildid, userid, "items", i, amt)
+
+            newtotal = total + 1
+            petfox.setValue(self, guildid, userid, "data", "itemsbought", newtotal)
 
             lemon = i[0].upper()   
 

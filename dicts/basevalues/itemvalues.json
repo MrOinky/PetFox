@@ -71,7 +71,7 @@
         ":salad:",
         "Food"
     ],
-    "amateurkibble": [
+    "amateur kibble": [
         7,
         0,
         0.05,
@@ -165,6 +165,22 @@
         0,
         80,
         ":balloon:",
+        "Toys"
+    ],
+    "yarn": [
+        0,
+        0,
+        0,
+        100,
+        ":yarn:",
+        "Toys"
+    ],
+    "crystal ball": [
+        0,
+        0,
+        0,
+        1000,
+        ":crystal_ball:",
         "Toys"
     ]
 }
